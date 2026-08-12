@@ -41,9 +41,9 @@
   </div>
 
   <script>
-    /* -----------------------------
-       FULL GENESIS KOBBLIN DATA
-       ----------------------------- */
+    /* ----------------------------------------------------
+       FULL GENESIS KOBBLIN DATA (23 kobblins)
+       ---------------------------------------------------- */
     const kobblinData = {
       Glimmer: { collection: "Genesis", number: "01/23", image: "images/glimmer.png" },
       Pebble: { collection: "Genesis", number: "02/23", image: "images/pebble.png" },
@@ -54,4 +54,48 @@
       Flint: { collection: "Genesis", number: "07/23", image: "images/flint.png" },
       Ember: { collection: "Genesis", number: "08/23", image: "images/ember.png" },
       Sprout: { collection: "Genesis", number: "09/23", image: "images/sprout.png" },
-      Ziggy: { collection: "Genesis", number: "10/23", image
+      Ziggy: { collection: "Genesis", number: "10/23", image: "images/ziggy.png" },
+      Rune: { collection: "Genesis", number: "11/23", image: "images/rune.png" },
+      Oat: { collection: "Genesis", number: "12/23", image: "images/oat.png" },
+      Cricket: { collection: "Genesis", number: "13/23", image: "images/cricket.png" },
+      Jasper: { collection: "Genesis", number: "14/23", image: "images/jasper.png" },
+      Twig: { collection: "Genesis", number: "15/23", image: "images/twig.png" },
+      Nico: { collection: "Genesis", number: "16/23", image: "images/nico.png" },
+      Cinder: { collection: "Genesis", number: "17/23", image: "images/cinder.png" },
+      Blink: { collection: "Genesis", number: "18/23", image: "images/blink.png" },
+      Hazel: { collection: "Genesis", number: "19/23", image: "images/hazel.png" },
+      Echo: { collection: "Genesis", number: "20/23", image: "images/echo.png" },
+      Finch: { collection: "Genesis", number: "21/23", image: "images/finch.png" },
+      Copper: { collection: "Genesis", number: "22/23", image: "images/copper.png" },
+      Orion: { collection: "Genesis", number: "23/23", image: "images/orion.png" }
+    };
+
+    /* ----------------------------------------------------
+       POPUP TRIGGER VIA QR CODE (?kobblin=NAME)
+       ---------------------------------------------------- */
+    const params = new URLSearchParams(window.location.search);
+    const found = params.get("kobblin");
+
+    if (found && kobblinData[found]) {
+      const k = kobblinData[found];
+
+      // Fill popup
+      document.getElementById("popup-name").textContent = found;
+      document.getElementById("popup-image").src = k.image;
+      document.getElementById("popup-collection").textContent = k.collection;
+      document.getElementById("popup-number").textContent = k.number;
+
+      // Show popup
+      document.getElementById("kobblin-popup").style.display = "flex";
+
+      // Mark as discovered
+      localStorage.setItem(found, "discovered");
+    }
+
+    function closePopup() {
+      document.getElementById("kobblin-popup").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
