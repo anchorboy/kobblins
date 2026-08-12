@@ -56,8 +56,10 @@
     // CONFIG - replace these placeholders with your values
     const SUPABASE_URL = 'SUPABASE_URL';
     const SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY';
-    // Use the exact table name you have in Supabase
-    const TABLE_NAME = 'Kobblins Database';
+
+    // Table names (normalized)
+    const KOBBLINS_TABLE = 'kobblins';
+    const DISCOVERIES_TABLE = 'discoveries';
 
     // Create Supabase client
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -71,11 +73,25 @@
       return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     }
 
+    // Normalize DB row to JS object
+    function normalizeRow(r) {
+      const name = r.name || r.NAME || '';
+      const slug = slugFromName(name || '');
+      return {
+        id: r.id ?? null,
+        name: name,
+        collection: r.collection ?? r.COLLECTION ?? '',
+        number: r.c_num ?? r['C NUM'] ?? r.o_num ?? r['O NUM'] ?? r.display_number ?? '',
+        image: r.image_url ?? r.image ?? `images/${slug}.png`,
+        thumbnail: r.thumbnail_url ?? r.thumbnail ?? `images/thumbs/${slug}.png`
+      };
+    }
+
     // Load kobblins from Supabase
     async function loadKobblins() {
       try {
         const { data: rows, error } = await supabaseClient
-          .from(TABLE_NAME)
+          .from(KOBBLINS_TABLE)
           .select('*');
 
         if (error) {
@@ -87,37 +103,44 @@
         kobblinDataLower = {};
 
         rows.forEach(r => {
-          const name = (r.NAME || r.name || '').toString().trim();
-          if (!name) return;
-
-          // Determine image and thumbnail paths. Since you store images in the repo,
-          // we generate predictable filenames from the NAME value.
-          const slug = slugFromName(name);
-          // Main image: images/<slug>.png
-          // Thumbnail: images/thumbs/<slug>.png
-          const image = r.image || r.IMAGE || `images/${slug}.png`;
-          const thumbnail = r.thumbnail || r.thumbnail || `images/thumbs/${slug}.png`;
-
-          // Use display number: prefer O NUM. (o_num, O_NUM, or O_NUM.) then C NUM
-          const number = r['O NUM.'] ?? r.o_num ?? r.ONUM ?? r['O_NUM'] ?? r['C NUM'] ?? r.c_num ?? '';
-
-          const collection = r.COLLECTION ?? r.collection ?? '';
-
-          const obj = {
-            collection,
-            number: number,
-            image,
-            thumbnail
-          };
-
-          kobblinData[name] = obj;
-          kobblinDataLower[name.toLowerCase()] = obj;
+          const obj = normalizeRow(r);
+          if (!obj.name) return;
+          kobblinData[obj.name] = obj;
+          kobblinDataLower[obj.name.toLowerCase()] = obj;
         });
 
         // After loading, handle URL param for popup
         handleUrlParam();
       } catch (err) {
         console.error('Error loading Kobblins from Supabase:', err);
+      }
+    }
+
+    // Record discovery by inserting into discoveries table (simple insert, discovered_at defaults to now())
+    async function recordDiscovery(kobblinRecord) {
+      try {
+        if (!kobblinRecord) return;
+        const key = kobblinRecord.name;
+        // Prevent repeated sends from same browser
+        if (localStorage.getItem('disc:' + key) === 'sent') return;
+
+        const payload = {
+          kobblin_id: kobblinRecord.id ?? null,
+          kobblin_name: key
+        };
+
+        const { data, error } = await supabaseClient
+          .from(DISCOVERIES_TABLE)
+          .insert([payload]);
+
+        if (error) {
+          console.error('Discovery record error:', error);
+        } else {
+          localStorage.setItem('disc:' + key, 'sent');
+          localStorage.setItem(key, 'discovered');
+        }
+      } catch (err) {
+        console.error('Unexpected error recording discovery:', err);
       }
     }
 
@@ -131,14 +154,17 @@
       const k = kobblinData[key] || kobblinDataLower[key.toLowerCase()];
       if (!k) return;
 
-      document.getElementById('popup-name').textContent = key;
+      document.getElementById('popup-name').textContent = k.name;
       document.getElementById('popup-image').src = k.image || '';
       document.getElementById('popup-collection').textContent = k.collection || '';
       document.getElementById('popup-number').textContent = k.number || '';
       document.getElementById('kobblin-popup').style.display = 'flex';
 
       // Mark discovered locally
-      localStorage.setItem(key, 'discovered');
+      localStorage.setItem(k.name, 'discovered');
+
+      // Send discovery to DB (will be no-op if already sent from this browser)
+      recordDiscovery(k);
     }
 
     function closePopup() {
