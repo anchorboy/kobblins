@@ -117,15 +117,20 @@
     }
 
     // Update discovered kobblins
-    const discovered = ["Glimmer", "Pebble"]; // Example — later dynamic
+    const discovered = [
+  "Glimmer", "Pebble", "Milo", "Mossy", "Pip", "Bramble", "Flint", "Ember",
+  "Sprout", "Ziggy", "Rune", "Oat", "Cricket", "Jasper", "Twig", "Nico",
+  "Cinder", "Blink", "Hazel", "Echo", "Finch", "Copper", "Orion"
+];
 
     discovered.forEach(name => {
-      if (localStorage.getItem(name) === "discovered") {
-        document.getElementById("name-" + name).textContent = name;
-        document.getElementById("thumb-" + name).style.backgroundImage = `url('images/${name.toLowerCase()}.png')`;
-        document.getElementById("thumb-" + name).style.backgroundSize = "cover";
-      }
-    });
+  if (localStorage.getItem(name) === "discovered") {
+    document.getElementById("name-" + name).textContent = name;
+    document.getElementById("thumb-" + name).style.backgroundImage =
+      `url('images/${name.toLowerCase()}.png')`;
+    document.getElementById("thumb-" + name).style.backgroundSize = "cover";
+  }
+});
   </script>
 
 </body>
