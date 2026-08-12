@@ -25,8 +25,53 @@
     </nav>
   </header>
 
-  <main>
-  </main>
+  <main></main>
+
+  <!-- Popup Window -->
+  <div id="kobblin-popup" class="popup-overlay">
+    <div class="popup-box">
+      <button class="popup-close" onclick="closePopup()">✕</button>
+      <h2 id="popup-name"></h2>
+      <img id="popup-image" class="popup-image" src="" alt="Kobblin">
+      <div class="popup-info">
+        <span id="popup-collection" class="popup-collection"></span>
+        <span id="popup-number" class="popup-number"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Detect QR scan via URL parameter
+    const params = new URLSearchParams(window.location.search);
+    const found = params.get("kobblin");
+
+    if (found) {
+      // Example data — later this will be dynamic
+      const kobblinData = {
+        Glimmer: { collection: "Genesis", number: "01/23", image: "images/glimmer.png" },
+        Pebble: { collection: "Genesis", number: "02/23", image: "images/pebble.png" },
+        // Add all kobblins here later
+      };
+
+      const k = kobblinData[found];
+
+      if (k) {
+        document.getElementById("popup-name").textContent = found;
+        document.getElementById("popup-image").src = k.image;
+        document.getElementById("popup-collection").textContent = k.collection;
+        document.getElementById("popup-number").textContent = k.number;
+
+        document.getElementById("kobblin-popup").style.display = "flex";
+
+        // Save discovery
+        localStorage.setItem(found, "discovered");
+      }
+    }
+
+    function closePopup() {
+      document.getElementById("kobblin-popup").style.display = "none";
+    }
+  </script>
 
 </body>
 </html>
