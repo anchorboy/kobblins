@@ -99,4 +99,9 @@ body {
 
 .kobblin-thumb {
   width: 40px;
-  height: 40px
+  height: 40px;
+  background: #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  display: inline-block; /* FIX: ensures thumbnail appears on mobile */
+}
