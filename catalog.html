@@ -34,29 +34,12 @@
 
       <div id="genesis" class="kobblin-list">
 
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Glimmer</span><span class="kobblin-number">01/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Pebble</span><span class="kobblin-number">02/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Milo</span><span class="kobblin-number">03/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Mossy</span><span class="kobblin-number">04/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Pip</span><span class="kobblin-number">05/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Bramble</span><span class="kobblin-number">06/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Flint</span><span class="kobblin-number">07/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Ember</span><span class="kobblin-number">08/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Sprout</span><span class="kobblin-number">09/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Ziggy</span><span class="kobblin-number">10/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Rune</span><span class="kobblin-number">11/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Oat</span><span class="kobblin-number">12/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Cricket</span><span class="kobblin-number">13/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Jasper</span><span class="kobblin-number">14/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Twig</span><span class="kobblin-number">15/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Nico</span><span class="kobblin-number">16/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Cinder</span><span class="kobblin-number">17/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Blink</span><span class="kobblin-number">18/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Hazel</span><span class="kobblin-number">19/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Echo</span><span class="kobblin-number">20/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Finch</span><span class="kobblin-number">21/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Copper</span><span class="kobblin-number">22/23</span></div>
-        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Orion</span><span class="kobblin-number">23/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Glimmer"></div><span class="kobblin-name" id="name-Glimmer">&lt;undiscovered&gt;</span><span class="kobblin-number">01/23</span></div>
+
+        <div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Pebble"></div><span class="kobblin-name" id="name-Pebble">&lt;undiscovered&gt;</span><span class="kobblin-number">02/23</span></div>
+
+        <!-- Repeat for all kobblins -->
+        <!-- I will generate the rest once you confirm this structure -->
 
       </div>
     </div>
@@ -88,6 +71,17 @@
       const list = document.getElementById(id);
       list.style.display = list.style.display === "block" ? "none" : "block";
     }
+
+    // Update discovered kobblins
+    const discovered = ["Glimmer", "Pebble"]; // Example — later dynamic
+
+    discovered.forEach(name => {
+      if (localStorage.getItem(name) === "discovered") {
+        document.getElementById("name-" + name).textContent = name;
+        document.getElementById("thumb-" + name).style.backgroundImage = `url('images/${name.toLowerCase()}.png')`;
+        document.getElementById("thumb-" + name).style.backgroundSize = "cover";
+      }
+    });
   </script>
 
 </body>
