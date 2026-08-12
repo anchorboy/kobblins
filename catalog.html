@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kobblins Catalog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header">
+    <h1>Kobblins</h1>
+    <p class="tagline"><em>A world of hidden painted rocks waiting to be discovered.</em></p>
+    <img src="images/kobblin.png" alt="Kobblin mascot" class="kobblin-img">
+
+    <nav class="navbar">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Genesis Collection -->
+    <div class="collection">
+      <div class="collection-title" onclick="toggleList('genesis')">Genesis</div>
+
+      <div id="genesis" class="kobblin-list">
+        <!-- 23 Kobblins -->
+        <!-- I will generate all rows below -->
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Glimmer</span><span class="kobblin-number">01/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Pebble</span><span class="kobblin-number">02/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Milo</span><span class="kobblin-number">03/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Mossy</span><span class="kobblin-number">04/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Pip</span><span class="kobblin-number">05/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Bramble</span><span class="kobblin-number">06/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Flint</span><span class="kobblin-number">07/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Ember</span><span class="kobblin-number">08/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Sprout</span><span class="kobblin-number">09/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Ziggy</span><span class="kobblin-number">10/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Rune</span><span class="kobblin-number">11/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Oat</span><span class="kobblin-number">12/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Cricket</span><span class="kobblin-number">13/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Jasper</span><span class="kobblin-number">14/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Twig</span><span class="kobblin-number">15/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Nico</span><span class="kobblin-number">16/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Cinder</span><span class="kobblin-number">17/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Blink</span><span class="kobblin-number">18/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Hazel</span><span class="kobblin-number">19/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Echo</span><span class="kobblin-number">20/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Finch</span><span class="kobblin-number">21/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Copper</span><span class="kobblin-number">22/23</span></div>
+        <div class="kobblin-row"><div class="kobblin-thumb"></div><span class="kobblin-name">Orion</span><span class="kobblin-number">23/23</span></div>
+      </div>
+    </div>
+
+    <!-- Winter 2026 Collection -->
+    <div class="collection">
+      <div class="collection-title" onclick="toggleList('winter2026')">Winter 2026</div>
+      <div id="winter2026" class="kobblin-list">
+        <p>(Add kobblins later)</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function toggleList(id) {
+      const list = document.getElementById(id);
+      list.style.display = list.style.display === "block" ? "none" : "block";
+    }
+  </script>
+
+</body>
+</html>
