@@ -117,7 +117,24 @@ body {
   color: #555;
 }
 
-/* Popup Window */
+/* Reset Button */
+.reset-button {
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: #b33a3a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+}
+
+.reset-button:hover {
+  background: #8f2e2e;
+}
+
+/* Main Popup Window */
 .popup-overlay {
   display: none;
   position: fixed;
@@ -129,6 +146,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  z-index: 9000;
 }
 
 .popup-box {
@@ -163,12 +181,34 @@ body {
   margin-top: 10px;
 }
 
-.popup-collection {
+.popup-collection,
+.popup-number {
   font-weight: bold;
 }
 
-.popup-number {
-  font-weight: bold;
+/* Congratulations Popup */
+.congrats-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+  z-index: 9999;
+}
+
+.congrats-box {
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  font-size: 1rem;
+  color: #000;
+  text-align: center;
+  max-width: 300px;
 }
 
 /* Mobile adjustments */
@@ -183,21 +223,5 @@ body {
 
   .navbar a {
     font-size: 1rem;
-  }
-
-  .reset-button {
-  margin: 20px auto;
-  padding: 10px 20px;
-  font-size: 1rem;
-  background: #b33a3a;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display: block;
-}
-
-  .reset-button:hover {
-  background: #8f2e2e;
   }
 }
