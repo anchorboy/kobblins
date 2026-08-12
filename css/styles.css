@@ -64,6 +64,13 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+.collection-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
 /* Make title + image clickable */
 .home-link {
   text-decoration: none;
@@ -76,13 +83,6 @@ body {
   margin-bottom: 10px;
   font-size: 0.9rem;
   color: #555;
-}
-
-.collection-title {
-  font-size: 1.3rem;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 10px;
 }
 
 .kobblin-list {
@@ -99,31 +99,4 @@ body {
 
 .kobblin-thumb {
   width: 40px;
-  height: 40px;
-  background: #ccc; /* blank until scanned */
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
-.kobblin-name {
-  font-weight: bold;
-}
-
-.kobblin-number {
-  margin-left: auto;
-  font-size: 0.9rem;
-  color: #555;
-}
-
-/* Mobile adjustments */
-@media (max-width: 600px) {
-  .site-header h1 {
-    font-size: 2rem;
-  }
-  .navbar {
-    gap: 15px;
-  }
-  .navbar a {
-    font-size: 1rem;
-  }
-}
+  height: 40px
