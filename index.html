@@ -41,37 +41,17 @@
   </div>
 
   <script>
-    // Detect QR scan via URL parameter
-    const params = new URLSearchParams(window.location.search);
-    const found = params.get("kobblin");
-
-    if (found) {
-      // Example data — later this will be dynamic
-      const kobblinData = {
-        Glimmer: { collection: "Genesis", number: "01/23", image: "images/glimmer.png" },
-        Pebble: { collection: "Genesis", number: "02/23", image: "images/pebble.png" },
-        // Add all kobblins here later
-      };
-
-      const k = kobblinData[found];
-
-      if (k) {
-        document.getElementById("popup-name").textContent = found;
-        document.getElementById("popup-image").src = k.image;
-        document.getElementById("popup-collection").textContent = k.collection;
-        document.getElementById("popup-number").textContent = k.number;
-
-        document.getElementById("kobblin-popup").style.display = "flex";
-
-        // Save discovery
-        localStorage.setItem(found, "discovered");
-      }
-    }
-
-    function closePopup() {
-      document.getElementById("kobblin-popup").style.display = "none";
-    }
-  </script>
-
-</body>
-</html>
+    /* -----------------------------
+       FULL GENESIS KOBBLIN DATA
+       ----------------------------- */
+    const kobblinData = {
+      Glimmer: { collection: "Genesis", number: "01/23", image: "images/glimmer.png" },
+      Pebble: { collection: "Genesis", number: "02/23", image: "images/pebble.png" },
+      Milo: { collection: "Genesis", number: "03/23", image: "images/milo.png" },
+      Mossy: { collection: "Genesis", number: "04/23", image: "images/mossy.png" },
+      Pip: { collection: "Genesis", number: "05/23", image: "images/pip.png" },
+      Bramble: { collection: "Genesis", number: "06/23", image: "images/bramble.png" },
+      Flint: { collection: "Genesis", number: "07/23", image: "images/flint.png" },
+      Ember: { collection: "Genesis", number: "08/23", image: "images/ember.png" },
+      Sprout: { collection: "Genesis", number: "09/23", image: "images/sprout.png" },
+      Ziggy: { collection: "Genesis", number: "10/23", image
