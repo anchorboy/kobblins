@@ -36,23 +36,25 @@
     <button id="reset-btn" class="reset-button">Reset All Kobblins</button>
   </main>
 
-  <!-- Congratulations Popup -->
-  <div id="kobblin-congrats" class="congrats-overlay">
-    <div class="congrats-box">
-      <p>Congratulations! You've found a Kobblin.<br>It will be automatically cataloged.</p>
-    </div>
-  </div>
-
-  <!-- Main Kobblin Popup -->
+  <!-- Unified Popup -->
   <div id="kobblin-popup" class="popup-overlay">
     <div class="popup-box">
+
+      <!-- Congratulations Banner -->
+      <div class="congrats-banner">
+        <p>Congratulations! You've found a Kobblin.<br>It will be automatically cataloged.</p>
+      </div>
+
       <button class="popup-close" onclick="closePopup()">✕</button>
+
       <h2 id="popup-name"></h2>
       <img id="popup-image" class="popup-image" src="" alt="Kobblin">
+
       <div class="popup-info">
         <span id="popup-collection" class="popup-collection"></span>
         <span id="popup-number" class="popup-number"></span>
       </div>
+
     </div>
   </div>
 
@@ -101,11 +103,8 @@
       document.getElementById("popup-collection").textContent = k.collection;
       document.getElementById("popup-number").textContent = k.number;
 
-      // Show main popup
+      // Show popup
       document.getElementById("kobblin-popup").style.display = "flex";
-
-      // Show congratulations popup
-      document.getElementById("kobblin-congrats").style.display = "flex";
 
       // Mark as discovered
       localStorage.setItem(found, "discovered");
@@ -113,8 +112,14 @@
 
     function closePopup() {
       document.getElementById("kobblin-popup").style.display = "none";
-      document.getElementById("kobblin-congrats").style.display = "none";
     }
+
+    /* Close popup when clicking outside the box */
+    document.getElementById("kobblin-popup").addEventListener("click", (e) => {
+      if (e.target === document.getElementById("kobblin-popup")) {
+        closePopup();
+      }
+    });
 
     /* ----------------------------------------------------
        RESET BUTTON — CLEAR ALL DISCOVERED KOBBLINS
