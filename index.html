@@ -97,6 +97,14 @@
     function closePopup() {
       document.getElementById("kobblin-popup").style.display = "none";
     }
+
+    /* ----------------------------------------------------
+     RESET BUTTON — CLEAR ALL DISCOVERED KOBBLINS
+     ---------------------------------------------------- */
+  document.getElementById("reset-btn").addEventListener("click", () => {
+    localStorage.clear();
+    alert("All Kobblins reset! You can test QR codes again.");
+    });
   </script>
 
 </body>
