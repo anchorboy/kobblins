@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
+  <!-- Disable caching so the homepage always loads fresh -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
   <title>Kobblins</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/styles.css">
@@ -26,6 +32,7 @@
   </header>
 
   <main>
+    <!-- Reset Button -->
     <button id="reset-btn" class="reset-button">Reset All Kobblins</button>
   </main>
 
@@ -99,11 +106,11 @@
     }
 
     /* ----------------------------------------------------
-     RESET BUTTON — CLEAR ALL DISCOVERED KOBBLINS
-     ---------------------------------------------------- */
-  document.getElementById("reset-btn").addEventListener("click", () => {
-    localStorage.clear();
-    alert("All Kobblins reset! You can test QR codes again.");
+       RESET BUTTON — CLEAR ALL DISCOVERED KOBBLINS
+       ---------------------------------------------------- */
+    document.getElementById("reset-btn").addEventListener("click", () => {
+      localStorage.clear();
+      alert("All Kobblins reset! You can test QR codes again.");
     });
   </script>
 
