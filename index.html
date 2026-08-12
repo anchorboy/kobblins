@@ -36,7 +36,14 @@
     <button id="reset-btn" class="reset-button">Reset All Kobblins</button>
   </main>
 
-  <!-- Popup Window -->
+  <!-- Congratulations Popup -->
+  <div id="kobblin-congrats" class="congrats-overlay">
+    <div class="congrats-box">
+      <p>Congratulations! You've found a Kobblin.<br>It will be automatically cataloged.</p>
+    </div>
+  </div>
+
+  <!-- Main Kobblin Popup -->
   <div id="kobblin-popup" class="popup-overlay">
     <div class="popup-box">
       <button class="popup-close" onclick="closePopup()">✕</button>
@@ -94,8 +101,11 @@
       document.getElementById("popup-collection").textContent = k.collection;
       document.getElementById("popup-number").textContent = k.number;
 
-      // Show popup
+      // Show main popup
       document.getElementById("kobblin-popup").style.display = "flex";
+
+      // Show congratulations popup
+      document.getElementById("kobblin-congrats").style.display = "flex";
 
       // Mark as discovered
       localStorage.setItem(found, "discovered");
@@ -103,6 +113,7 @@
 
     function closePopup() {
       document.getElementById("kobblin-popup").style.display = "none";
+      document.getElementById("kobblin-congrats").style.display = "none";
     }
 
     /* ----------------------------------------------------
