@@ -64,6 +64,20 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* Make title + image clickable */
+.home-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Subtitle under collection names */
+.collection-subtitle {
+  margin-top: -5px;
+  margin-bottom: 10px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
 .collection-title {
   font-size: 1.3rem;
   font-weight: bold;
