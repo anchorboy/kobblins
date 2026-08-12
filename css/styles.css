@@ -103,5 +103,10 @@ body {
   background: #ccc;
   border-radius: 5px;
   margin-right: 10px;
-  display: inline-block; /* FIX: ensures thumbnail appears on mobile */
+  display: inline-block; /* ensures thumbnail appears on mobile */
+}
+
+.kobblin-name {
+  font-weight: bold;
+  margin-right: 10px; /* adds spacing before the number */
 }
