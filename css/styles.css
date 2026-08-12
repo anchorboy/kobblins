@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.5;
-  background: #E0CDB6; /* Updated background color */
+  background: #E6D9C1;
   text-align: center;
 }
 
@@ -16,15 +16,22 @@ body {
 /* Title */
 .site-header h1 {
   font-size: 2.4rem;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   color: #333;
+}
+
+/* Tagline */
+.tagline {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #444;
 }
 
 /* Kobblin Image */
 .kobblin-img {
   width: 120px;
   height: auto;
-  margin-bottom: 15px;
+  margin: 10px auto 20px auto;
 }
 
 /* Navigation Bar */
@@ -46,10 +53,52 @@ body {
   color: #005f8f;
 }
 
-/* Main content */
-main {
-  padding: 20px;
-  font-size: 1rem;
+/* Catalog Page */
+.collection {
+  background: #fff;
+  padding: 15px;
+  margin: 15px auto;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.collection-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.kobblin-list {
+  display: none; /* collapsed by default */
+  text-align: left;
+}
+
+.kobblin-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.kobblin-thumb {
+  width: 40px;
+  height: 40px;
+  background: #ccc; /* blank until scanned */
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.kobblin-name {
+  font-weight: bold;
+}
+
+.kobblin-number {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 /* Mobile adjustments */
@@ -57,11 +106,9 @@ main {
   .site-header h1 {
     font-size: 2rem;
   }
-
   .navbar {
     gap: 15px;
   }
-
   .navbar a {
     font-size: 1rem;
   }
