@@ -49,69 +49,111 @@
     </div>
   </div>
 
+  <!-- Supabase + Kobblins loader -->
+  <!-- Replace SUPABASE_URL and SUPABASE_ANON_KEY placeholders with your project's values -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.min.js"></script>
   <script>
-    /* ----------------------------------------------------
-       FULL GENESIS KOBBLIN DATA (23 kobblins)
-       ---------------------------------------------------- */
-    const kobblinData = {
-      Glimmer: { collection: "Genesis", number: "01/23", image: "images/glimmer.png" },
-      Pebble: { collection: "Genesis", number: "02/23", image: "images/pebble.png" },
-      Milo: { collection: "Genesis", number: "03/23", image: "images/milo.png" },
-      Mossy: { collection: "Genesis", number: "04/23", image: "images/mossy.png" },
-      Pip: { collection: "Genesis", number: "05/23", image: "images/pip.png" },
-      Bramble: { collection: "Genesis", number: "06/23", image: "images/bramble.png" },
-      Flint: { collection: "Genesis", number: "07/23", image: "images/flint.png" },
-      Ember: { collection: "Genesis", number: "08/23", image: "images/ember.png" },
-      Sprout: { collection: "Genesis", number: "09/23", image: "images/sprout.png" },
-      Ziggy: { collection: "Genesis", number: "10/23", image: "images/ziggy.png" },
-      Rune: { collection: "Genesis", number: "11/23", image: "images/rune.png" },
-      Oat: { collection: "Genesis", number: "12/23", image: "images/oat.png" },
-      Cricket: { collection: "Genesis", number: "13/23", image: "images/cricket.png" },
-      Jasper: { collection: "Genesis", number: "14/23", image: "images/jasper.png" },
-      Twig: { collection: "Genesis", number: "15/23", image: "images/twig.png" },
-      Nico: { collection: "Genesis", number: "16/23", image: "images/nico.png" },
-      Cinder: { collection: "Genesis", number: "17/23", image: "images/cinder.png" },
-      Blink: { collection: "Genesis", number: "18/23", image: "images/blink.png" },
-      Hazel: { collection: "Genesis", number: "19/23", image: "images/hazel.png" },
-      Echo: { collection: "Genesis", number: "20/23", image: "images/echo.png" },
-      Finch: { collection: "Genesis", number: "21/23", image: "images/finch.png" },
-      Copper: { collection: "Genesis", number: "22/23", image: "images/copper.png" },
-      Orion: { collection: "Genesis", number: "23/23", image: "images/orion.png" }
-    };
+    // CONFIG - replace these placeholders with your values
+    const SUPABASE_URL = 'SUPABASE_URL';
+    const SUPABASE_ANON_KEY = 'SUPABASE_ANON_KEY';
+    // Use the exact table name you have in Supabase
+    const TABLE_NAME = 'Kobblins Database';
 
-    /* ----------------------------------------------------
-       POPUP TRIGGER VIA QR CODE (?kobblin=NAME)
-       ---------------------------------------------------- */
-    const params = new URLSearchParams(window.location.search);
-    const found = params.get("kobblin");
+    // Create Supabase client
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    if (found && kobblinData[found]) {
-      const k = kobblinData[found];
+    // Data maps
+    let kobblinData = {};       // keyed by exact name
+    let kobblinDataLower = {};  // keyed by lowercase name for case-insensitive lookup
 
-      // Fill popup
-      document.getElementById("popup-name").textContent = found;
-      document.getElementById("popup-image").src = k.image;
-      document.getElementById("popup-collection").textContent = k.collection;
-      document.getElementById("popup-number").textContent = k.number;
+    // Utility: create slug from name for image filenames
+    function slugFromName(name) {
+      return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
 
-      // Show popup
-      document.getElementById("kobblin-popup").style.display = "flex";
+    // Load kobblins from Supabase
+    async function loadKobblins() {
+      try {
+        const { data: rows, error } = await supabaseClient
+          .from(TABLE_NAME)
+          .select('*');
 
-      // Mark as discovered
-      localStorage.setItem(found, "discovered");
+        if (error) {
+          console.error('Supabase error:', error);
+          return;
+        }
+
+        kobblinData = {};
+        kobblinDataLower = {};
+
+        rows.forEach(r => {
+          const name = (r.NAME || r.name || '').toString().trim();
+          if (!name) return;
+
+          // Determine image and thumbnail paths. Since you store images in the repo,
+          // we generate predictable filenames from the NAME value.
+          const slug = slugFromName(name);
+          // Main image: images/<slug>.png
+          // Thumbnail: images/thumbs/<slug>.png
+          const image = r.image || r.IMAGE || `images/${slug}.png`;
+          const thumbnail = r.thumbnail || r.thumbnail || `images/thumbs/${slug}.png`;
+
+          // Use display number: prefer O NUM. (o_num, O_NUM, or O_NUM.) then C NUM
+          const number = r['O NUM.'] ?? r.o_num ?? r.ONUM ?? r['O_NUM'] ?? r['C NUM'] ?? r.c_num ?? '';
+
+          const collection = r.COLLECTION ?? r.collection ?? '';
+
+          const obj = {
+            collection,
+            number: number,
+            image,
+            thumbnail
+          };
+
+          kobblinData[name] = obj;
+          kobblinDataLower[name.toLowerCase()] = obj;
+        });
+
+        // After loading, handle URL param for popup
+        handleUrlParam();
+      } catch (err) {
+        console.error('Error loading Kobblins from Supabase:', err);
+      }
+    }
+
+    // Show popup if ?kobblin=NAME is present
+    function handleUrlParam() {
+      const params = new URLSearchParams(window.location.search);
+      const foundParam = params.get('kobblin');
+      if (!foundParam) return;
+
+      const key = foundParam.trim();
+      const k = kobblinData[key] || kobblinDataLower[key.toLowerCase()];
+      if (!k) return;
+
+      document.getElementById('popup-name').textContent = key;
+      document.getElementById('popup-image').src = k.image || '';
+      document.getElementById('popup-collection').textContent = k.collection || '';
+      document.getElementById('popup-number').textContent = k.number || '';
+      document.getElementById('kobblin-popup').style.display = 'flex';
+
+      // Mark discovered locally
+      localStorage.setItem(key, 'discovered');
     }
 
     function closePopup() {
-      document.getElementById("kobblin-popup").style.display = "none";
+      document.getElementById('kobblin-popup').style.display = 'none';
     }
 
-    /* ----------------------------------------------------
-       RESET BUTTON — CLEAR ALL DISCOVERED KOBBLINS
-       ---------------------------------------------------- */
-    document.getElementById("reset-btn").addEventListener("click", () => {
+    // Reset button (unchanged behavior)
+    document.getElementById('reset-btn').addEventListener('click', () => {
       localStorage.clear();
-      alert("All Kobblins reset! You can test QR codes again.");
+      alert('All Kobblins reset! You can test QR codes again.');
     });
+
+    // Load kobblins after DOM ready
+    window.addEventListener('DOMContentLoaded', loadKobblins);
+
   </script>
 
 </body>
