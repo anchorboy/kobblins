@@ -1,0 +1,28 @@
+/* Base mobile-friendly styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.5;
+  background: #f4f4f4;
+}
+
+h1 {
+  font-size: 2rem;
+  color: #007acc;
+}
+
+p {
+  font-size: 1rem;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+}
