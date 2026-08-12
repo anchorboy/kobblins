@@ -184,4 +184,20 @@ body {
   .navbar a {
     font-size: 1rem;
   }
+
+  .reset-button {
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: #b33a3a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+}
+
+  .reset-button:hover {
+  background: #8f2e2e;
+  }
 }
