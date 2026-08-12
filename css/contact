@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Kobblins</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- Global Header -->
+  <header class="site-header">
+    <a href="index.html" class="home-link">
+      <h1>Kobblins</h1>
+      <img src="images/kobblin.png" alt="Kobblin mascot" class="kobblin-img">
+    </a>
+
+    <p class="tagline"><em>A world of hidden painted rocks waiting to be discovered.</em></p>
+
+    <nav class="navbar">
+      <a href="about.html">About</a>
+      <a href="catalog.html">Catalog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div style="max-width: 600px; margin: 0 auto; padding: 20px; text-align: left;">
+
+      <h2>Contact</h2>
+
+      <p>
+        Have a question about Kobblins? Found one and want to share your story?  
+        Or maybe you're curious about upcoming collections and releases?
+      </p>
+
+      <p>
+        While Kobblins are small, the world around them is growing — and we love hearing from
+        the people who discover, collect, or simply enjoy these tiny painted creatures.
+      </p>
+
+      <p>
+        You can reach out anytime using the placeholder contact information below:
+      </p>
+
+      <ul style="line-height: 1.8;">
+        <li><strong>Email:</strong> contact@kobblins.example</li>
+        <li><strong>Instagram:</strong> @kobblinsworld</li>
+        <li><strong>Messages carried by friendly forest spirits:</strong> arrival times may vary</li>
+      </ul>
+
+      <p>
+        Whether you're reporting a newly found Kobblin, suggesting a future collection theme,
+        or just saying hello — your message is always welcome.
+      </p>
+
+    </div>
+  </main>
+
+</body>
+</html>
