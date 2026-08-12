@@ -34,6 +34,12 @@ body {
   margin: 10px auto 20px auto;
 }
 
+/* Make title + image clickable */
+.home-link {
+  text-decoration: none;
+  color: inherit;
+}
+
 /* Navigation Bar */
 .navbar {
   display: flex;
@@ -71,12 +77,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* Make title + image clickable */
-.home-link {
-  text-decoration: none;
-  color: inherit;
-}
-
 /* Subtitle under collection names */
 .collection-subtitle {
   margin-top: -5px;
@@ -86,7 +86,7 @@ body {
 }
 
 .kobblin-list {
-  display: none; /* collapsed by default */
+  display: none;
   text-align: left;
 }
 
@@ -103,10 +103,31 @@ body {
   background: #ccc;
   border-radius: 5px;
   margin-right: 10px;
-  display: inline-block; /* ensures thumbnail appears on mobile */
+  display: inline-block; /* FIX: ensures thumbnail appears on mobile */
 }
 
 .kobblin-name {
   font-weight: bold;
-  margin-right: 10px; /* adds spacing before the number */
+  margin-right: 10px; /* FIX: spacing before number */
+}
+
+.kobblin-number {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+  .site-header h1 {
+    font-size: 2rem;
+  }
+
+  .navbar {
+    gap: 15px;
+  }
+
+  .navbar a {
+    font-size: 1rem;
+  }
 }
