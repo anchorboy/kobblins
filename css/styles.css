@@ -2,27 +2,67 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 20px;
+  padding: 0;
   line-height: 1.5;
   background: #f4f4f4;
+  text-align: center;
 }
 
-h1 {
-  font-size: 2rem;
+/* Header */
+.site-header {
+  padding: 20px;
+}
+
+/* Title */
+.site-header h1 {
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Kobblin Image */
+.kobblin-img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.navbar a {
+  text-decoration: none;
   color: #007acc;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
-p {
+.navbar a:hover {
+  color: #005f8f;
+}
+
+/* Main content */
+main {
+  padding: 20px;
   font-size: 1rem;
 }
 
-/* Adjustments for smaller screens */
+/* Mobile adjustments */
 @media (max-width: 600px) {
-  body {
-    padding: 10px;
+  .site-header h1 {
+    font-size: 2rem;
   }
 
-  h1 {
-    font-size: 1.6rem;
+  .navbar {
+    gap: 15px;
+  }
+
+  .navbar a {
+    font-size: 1rem;
   }
 }
