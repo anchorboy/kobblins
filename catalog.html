@@ -32,60 +32,8 @@
       <div class="collection-title" onclick="toggleList('genesis')">Genesis</div>
       <p class="collection-subtitle"><em>The launch collection (Fall 2026).</em></p>
 
-      <div id="genesis" class="kobblin-list">
+      <div id="genesis" class="kobblin-list"></div>
 
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Glimmer"></div><span class="kobblin-name" id="name-Glimmer">&lt;undiscovered&gt;</span><span class="kobblin-number">01/23</span></di[...]
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Pebble"></div><span class="kobblin-name" id="name-Pebble">&lt;undiscovered&gt;</span><span class="kobblin-number">02/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Milo"></div><span class="kobblin-name" id="name-Milo">&lt;undiscovered&gt;</span><span class="kobblin-number">03/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Mossy"></div><span class="kobblin-name" id="name-Mossy">&lt;undiscovered&gt;</span><span class="kobblin-number">04/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Pip"></div><span class="kobblin-name" id="name-Pip">&lt;undiscovered&gt;</span><span class="kobblin-number">05/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Bramble"></div><span class="kobblin-name" id="name-Bramble">&lt;undiscovered&gt;</span><span class="kobblin-number">06/23</span></di[...]
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Flint"></div><span class="kobblin-name" id="name-Flint">&lt;undiscovered&gt;</span><span class="kobblin-number">07/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Ember"></div><span class="kobblin-name" id="name-Ember">&lt;undiscovered&gt;</span><span class="kobblin-number">08/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Sprout"></div><span class="kobblin-name" id="name-Sprout">&lt;undiscovered&gt;</span><span class="kobblin-number">09/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Ziggy"></div><span class="kobblin-name" id="name-Ziggy">&lt;undiscovered&gt;</span><span class="kobblin-number">10/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Rune"></div><span class="kobblin-name" id="name-Rune">&lt;undiscovered&gt;</span><span class="kobblin-number">11/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Oat"></div><span class="kobblin-name" id="name-Oat">&lt;undiscovered&gt;</span><span class="kobblin-number">12/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Cricket"></div><span class="kobblin-name" id="name-Cricket">&lt;undiscovered&gt;</span><span class="kobblin-number">13/23</span></di[...]
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Jasper"></div><span class="kobblin-name" id="name-Jasper">&lt;undiscovered&gt;</span><span class="kobblin-number">14/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Twig"></div><span class="kobblin-name" id="name-Twig">&lt;undiscovered&gt;</span><span class="kobblin-number">15/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Nico"></div><span class="kobblin-name" id="name-Nico">&lt;undiscovered&gt;</span><span class="kobblin-number">16/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Cinder"></div><span class="kobblin-name" id="name-Cinder">&lt;undiscovered&gt;</span><span class="kobblin-number">17/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Blink"></div><span class="kobblin-name" id="name-Blink">&lt;undiscovered&gt;</span><span class="kobblin-number">18/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Hazel"></div><span class="kobblin-name" id="name-Hazel">&lt;undiscovered&gt;</span><span class="kobblin-number">19/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Echo"></div><span class="kobblin-name" id="name-Echo">&lt;undiscovered&gt;</span><span class="kobblin-number">20/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Finch"></div><span class="kobblin-name" id="name-Finch">&lt;undiscovered&gt;</span><span class="kobblin-number">21/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Copper"></div><span class="kobblin-name" id="name-Copper">&lt;undiscovered&gt;</span><span class="kobblin-number">22/23</span></div>
-
-<div class="kobblin-row"><div class="kobblin-thumb" id="thumb-Orion"></div><span class="kobblin-name" id="name-Orion">&lt;undiscovered&gt;</span><span class="kobblin-number">23/23</span></div>
-
-</div>
-
-        <!-- Repeat for all kobblins -->
-        <!-- I will generate the rest once you confirm this structure -->
-
-      </div>
     </div>
 
     <!-- Apingaut Collection -->
@@ -116,11 +64,71 @@
       list.style.display = list.style.display === "block" ? "none" : "block";
     }
 
-    // Update discovered kobblins by reading from the database directly
-    (async function(){
+    // Ordered Genesis kobblins data
+    const genesisKobblins = [
+      {id:'GEN001', name:'Glimmer', number:'01/23'},
+      {id:'GEN002', name:'Pebble',  number:'02/23'},
+      {id:'GEN003', name:'Milo',    number:'03/23'},
+      {id:'GEN004', name:'Mossy',   number:'04/23'},
+      {id:'GEN005', name:'Pip',     number:'05/23'},
+      {id:'GEN006', name:'Bramble', number:'06/23'},
+      {id:'GEN007', name:'Flint',   number:'07/23'},
+      {id:'GEN008', name:'Ember',   number:'08/23'},
+      {id:'GEN009', name:'Sprout',  number:'09/23'},
+      {id:'GEN010', name:'Ziggy',   number:'10/23'},
+      {id:'GEN011', name:'Rune',    number:'11/23'},
+      {id:'GEN012', name:'Oat',     number:'12/23'},
+      {id:'GEN013', name:'Cricket', number:'13/23'},
+      {id:'GEN014', name:'Jasper',  number:'14/23'},
+      {id:'GEN015', name:'Twig',    number:'15/23'},
+      {id:'GEN016', name:'Nico',    number:'16/23'},
+      {id:'GEN017', name:'Cinder',  number:'17/23'},
+      {id:'GEN018', name:'Blink',   number:'18/23'},
+      {id:'GEN019', name:'Hazel',   number:'19/23'},
+      {id:'GEN020', name:'Echo',    number:'20/23'},
+      {id:'GEN021', name:'Finch',   number:'21/23'},
+      {id:'GEN022', name:'Copper',  number:'22/23'},
+      {id:'GEN023', name:'Orion',   number:'23/23'}
+    ];
+
+    // Build DOM rows cleanly
+    function buildGenesisList() {
+      const container = document.getElementById('genesis');
+      if (!container) return;
+      container.innerHTML = ''; // start fresh
+
+      genesisKobblins.forEach(k => {
+        const row = document.createElement('div');
+        row.className = 'kobblin-row';
+
+        const thumb = document.createElement('div');
+        thumb.className = 'kobblin-thumb';
+        thumb.id = 'thumb-' + k.name;
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'kobblin-name';
+        nameEl.id = 'name-' + k.name;
+        nameEl.textContent = '<undiscovered>';
+
+        const num = document.createElement('span');
+        num.className = 'kobblin-number';
+        num.textContent = k.number;
+
+        row.appendChild(thumb);
+        row.appendChild(nameEl);
+        row.appendChild(num);
+
+        container.appendChild(row);
+      });
+    }
+
+    // Run builder immediately so DOM is well-formed before data fetch
+    buildGenesisList();
+
+    // Update discovered state from the DB (same project as site)
+    (async function updateFromDB(){
       const SUPABASE_URL = 'https://ojkziqfqokifxmobmzcv.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_2qU46FYMyWxCmomlkikmAQ_WomS8c0Q';
-
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/kobblins?select=id,name,discovered,last_discovered_at`, {
           headers: {
@@ -132,21 +140,35 @@
         rows.forEach(r => {
           const name = (r.name || '').trim();
           if (!name) return;
+          const elName = document.getElementById('name-' + name);
+          const thumb = document.getElementById('thumb-' + name);
+          if (!elName || !thumb) return;
           if (r.discovered) {
-            const elName = document.getElementById('name-' + name);
-            const thumb = document.getElementById('thumb-' + name);
-            if (elName) elName.textContent = name;
-            if (thumb) {
-              thumb.style.backgroundImage = `url('images/${name.toLowerCase()}.png')`;
-              thumb.style.backgroundSize = 'cover';
+            elName.textContent = name;
+            thumb.style.backgroundImage = `url('images/${name.toLowerCase()}.png')`;
+            thumb.style.backgroundSize = 'cover';
+            // add timestamp if available
+            if (r.last_discovered_at) {
+              let tsEl = document.getElementById('discovered-at-' + name);
+              if (!tsEl) {
+                tsEl = document.createElement('span');
+                tsEl.id = 'discovered-at-' + name;
+                tsEl.className = 'discovered-at';
+                elName.parentNode.insertBefore(tsEl, elName.nextSibling);
+              }
+              tsEl.textContent = ` • found ${new Date(r.last_discovered_at).toLocaleString()}`;
             }
+          } else {
+            elName.textContent = '<undiscovered>';
+            thumb.style.backgroundImage = '';
+            const tsEl = document.getElementById('discovered-at-' + name);
+            if (tsEl) tsEl.remove();
           }
         });
       } catch (err) {
         console.error('Error loading kobblins for catalog:', err);
       }
     })();
-
 
   </script>
 
