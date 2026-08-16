@@ -64,6 +64,11 @@
       list.style.display = list.style.display === "block" ? "none" : "block";
     }
 
+    // Utility: create slug from name for image filenames
+    function slugFromName(name) {
+      return (name || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
+
     // Ordered Genesis kobblins data
     const genesisKobblins = [
       {id:'GEN001', name:'Glimmer', number:'01/23'},
@@ -130,7 +135,8 @@
       const SUPABASE_URL = 'https://ojkziqfqokifxmobmzcv.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_2qU46FYMyWxCmomlkikmAQ_WomS8c0Q';
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/kobblins?select=id,name,discovered,last_discovered_at`, {
+        // request image fields as well so we can show thumbnails from DB if present
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/kobblins?select=id,name,discovered,last_discovered_at,image,thumbnail,image_url,thumbnail_url`, {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
@@ -145,8 +151,18 @@
           if (!elName || !thumb) return;
           if (r.discovered) {
             elName.textContent = name;
-            thumb.style.backgroundImage = `url('images/${name.toLowerCase()}.png')`;
-            thumb.style.backgroundSize = 'cover';
+            // prefer explicit image/url fields from DB; fall back to slug-based local images
+            const slug = slugFromName(name);
+            const imageUrl = r.image_url || r.image || r.thumbnail_url || r.thumbnail || `images/${slug}.png`;
+            // If the imageUrl looks like a storage path without host and starts with 'images/', keep as relative
+            // Set background image (use quotes to handle spaces)
+            try {
+              thumb.style.backgroundImage = `url("${imageUrl}")`;
+              thumb.style.backgroundSize = 'cover';
+            } catch (e) {
+              // fallback: clear image
+              thumb.style.backgroundImage = '';
+            }
             // add timestamp if available
             if (r.last_discovered_at) {
               let tsEl = document.getElementById('discovered-at-' + name);
