@@ -92,8 +92,9 @@ body {
 .kobblin-row {
   display: flex;
   align-items: center;
-  padding: 6px 0;
+  padding: 8px 0;
   border-bottom: 1px solid #ddd;
+  gap: 12px; /* ensure consistent spacing between elements */
 }
 
 .kobblin-thumb {
@@ -103,17 +104,26 @@ body {
   border-radius: 5px;
   margin-right: 10px;
   display: inline-block;
+  flex: 0 0 40px; /* prevent the thumbnail from shrinking */
+  background-size: cover;
+  background-position: center;
 }
 
 .kobblin-name {
   font-weight: bold;
   margin-right: 10px;
+  flex: 1 1 auto;      /* allow name to take remaining space */
+  min-width: 0;        /* allow the flex child to shrink properly */
+  overflow: hidden;    /* prevent long names from wrapping the layout */
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .kobblin-number {
   margin-left: auto;
   font-size: 0.9rem;
   color: #555;
+  flex: 0 0 auto; /* keep number fixed on the right */
 }
 
 /* Reset Button */
