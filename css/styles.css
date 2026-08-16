@@ -64,8 +64,8 @@ body {
   background: #fff;
   padding: 15px;
   margin: 15px auto;
-  width: 92%;
-  max-width: 520px; /* slightly wider so items have room */
+  width: 94%;
+  max-width: 760px; /* wider card for desktop */
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -84,57 +84,56 @@ body {
   color: #555;
 }
 
+/* show lists by default */
 .kobblin-list {
-  display: none;
+  display: block;
   text-align: left;
 }
 
+/* each row is a 3-column grid: thumb | name+timestamp | number */
 .kobblin-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 56px 1fr 72px; /* thumb | name/timestamp | number */
+  grid-column-gap: 12px;
   align-items: center;
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #ddd;
-  gap: 12px; /* ensure consistent spacing between elements */
 }
 
+/* slightly larger thumbnail */
 .kobblin-thumb {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   background: #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
-  display: inline-block;
-  flex: 0 0 40px; /* prevent the thumbnail from shrinking */
+  border-radius: 6px;
   background-size: cover;
   background-position: center;
 }
 
+/* name can wrap, timestamp shown below name if needed */
 .kobblin-name {
   font-weight: bold;
-  margin-right: 10px;
-  flex: 1 1 auto;      /* allow name to take remaining space */
-  min-width: 0;        /* allow the flex child to shrink properly */
-  /* allow wrapping so timestamp can appear on its own line if needed */
+  margin: 0;
+  line-height: 1.2;
+  white-space: normal; /* allow wrapping */
   overflow: visible;
-  text-overflow: unset;
-  white-space: normal;
 }
 
-.kobblin-number {
-  margin-left: 12px;
-  font-size: 0.9rem;
-  color: #555;
-  flex: 0 0 auto; /* keep number fixed on the right */
-  white-space: nowrap;
-}
-
-/* small timestamp badge shown next to name (wraps below name if space is tight) */
+/* timestamp block under the name */
 .discovered-at {
   display: block;
   margin-top: 4px;
   font-size: 0.85rem;
   color: #666;
   font-weight: normal;
+}
+
+/* right column: number */
+.kobblin-number {
+  justify-self: end;
+  font-size: 0.95rem;
+  color: #555;
+  white-space: nowrap;
 }
 
 /* Reset Button */
@@ -218,25 +217,10 @@ body {
   font-weight: bold;
 }
 
-/* Desktop adjustments: make list visible by default and give extra room */
-@media (min-width: 700px) {
-  .kobblin-list { display: block; }
-  .collection { max-width: 640px; }
-  .kobblin-thumb { width: 48px; height: 48px; flex: 0 0 48px; }
-  .kobblin-row { gap: 16px; padding: 10px 0; }
-}
-
-/* Mobile adjustments */
-@media (max-width: 600px) {
-  .site-header h1 {
-    font-size: 2rem;
-  }
-
-  .navbar {
-    gap: 15px;
-  }
-
-  .navbar a {
-    font-size: 1rem;
-  }
+/* responsive tweaks: on small screens make things compact */
+@media (max-width: 520px) {
+  .collection { max-width: 420px; width: 96%; }
+  .kobblin-row { grid-template-columns: 44px 1fr 56px; grid-column-gap: 10px; padding: 8px 0; }
+  .kobblin-thumb { width: 40px; height: 40px; }
+  .discovered-at { display: none; } /* hide timestamp on narrow screens to keep rows short */
 }
