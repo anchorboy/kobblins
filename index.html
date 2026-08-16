@@ -108,6 +108,16 @@
           kobblinDataLower[obj.name.toLowerCase()] = obj;
         });
 
+        // --- mark discovered items in localStorage so catalog.html recognizes them ---
+        rows.forEach(r => {
+          const name = (r.name || r.NAME || '').trim();
+          if (!name) return;
+          if (r.discovered) {
+            try { localStorage.setItem(name, 'discovered'); } catch (e) { /* ignore storage errors */ }
+          }
+        });
+        // -----------------------------------------------------------------------------
+
         // After loading, handle URL param for popup
         handleUrlParam();
       } catch (err) {
