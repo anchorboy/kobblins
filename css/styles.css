@@ -64,8 +64,8 @@ body {
   background: #fff;
   padding: 15px;
   margin: 15px auto;
-  width: 90%;
-  max-width: 400px;
+  width: 92%;
+  max-width: 520px; /* slightly wider so items have room */
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
@@ -114,16 +114,27 @@ body {
   margin-right: 10px;
   flex: 1 1 auto;      /* allow name to take remaining space */
   min-width: 0;        /* allow the flex child to shrink properly */
-  overflow: hidden;    /* prevent long names from wrapping the layout */
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* allow wrapping so timestamp can appear on its own line if needed */
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
 }
 
 .kobblin-number {
-  margin-left: auto;
+  margin-left: 12px;
   font-size: 0.9rem;
   color: #555;
   flex: 0 0 auto; /* keep number fixed on the right */
+  white-space: nowrap;
+}
+
+/* small timestamp badge shown next to name (wraps below name if space is tight) */
+.discovered-at {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: normal;
 }
 
 /* Reset Button */
@@ -205,6 +216,14 @@ body {
 .popup-collection,
 .popup-number {
   font-weight: bold;
+}
+
+/* Desktop adjustments: make list visible by default and give extra room */
+@media (min-width: 700px) {
+  .kobblin-list { display: block; }
+  .collection { max-width: 640px; }
+  .kobblin-thumb { width: 48px; height: 48px; flex: 0 0 48px; }
+  .kobblin-row { gap: 16px; padding: 10px 0; }
 }
 
 /* Mobile adjustments */
