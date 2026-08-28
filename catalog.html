@@ -29,8 +29,10 @@
 
     <!-- Genesis Collection -->
     <div class="collection">
-      <div class="collection-title" onclick="toggleList('genesis')">Genesis</div>
-      <p class="collection-subtitle"><em>The launch collection (Fall 2026).</em></p>
+      <div class="collection-header" onclick="toggleList('genesis')">
+        <div class="collection-title">Genesis</div>
+        <p class="collection-subtitle"><em>The launch collection (Fall 2026).</em></p>
+      </div>
 
       <div id="genesis" class="kobblin-list"></div>
 
@@ -38,8 +40,10 @@
 
     <!-- Apingaut Collection -->
     <div class="collection">
-      <div class="collection-title" onclick="toggleList('apingaut')">Apingaut (The First Snow)</div>
-      <p class="collection-subtitle"><em>Winter 2026 collection.</em></p>
+      <div class="collection-header" onclick="toggleList('apingaut')">
+        <div class="collection-title">Apingaut (The First Snow)</div>
+        <p class="collection-subtitle"><em>Winter 2026 collection.</em></p>
+      </div>
 
       <div id="apingaut" class="kobblin-list">
         <p>(Add kobblins later)</p>
@@ -48,8 +52,10 @@
 
     <!-- Rogues Gallery #1 -->
     <div class="collection">
-      <div class="collection-title" onclick="toggleList('rogues')">Rogues Gallery #1</div>
-      <p class="collection-subtitle"><em>A collection of Kobblins up to no good.</em></p>
+      <div class="collection-header" onclick="toggleList('rogues')">
+        <div class="collection-title">Rogues Gallery #1</div>
+        <p class="collection-subtitle"><em>A collection of Kobblins up to no good.</em></p>
+      </div>
 
       <div id="rogues" class="kobblin-list">
         <p>(Add kobblins later)</p>
@@ -61,6 +67,7 @@
   <script>
     function toggleList(id) {
       const list = document.getElementById(id);
+      if (!list) return;
       list.style.display = list.style.display === "block" ? "none" : "block";
     }
 
@@ -146,21 +153,36 @@
         rows.forEach(r => {
           const name = (r.name || '').trim();
           if (!name) return;
-          const elName = document.getElementById('name-' + name);
-          const thumb = document.getElementById('thumb-' + name);
-          if (!elName || !thumb) return;
+          const key = name.toLowerCase();
+          const elName = document.querySelector('.kobblin-name[data-name="' + key + '"]') || document.getElementById('name-' + name);
+          const thumb = document.querySelector('.kobblin-thumb[data-name="' + key + '"]') || document.getElementById('thumb-' + name);
+          if (!elName || !thumb) {
+            // try slug id fallback
+            const slugId = 'name-' + slugFromName(name);
+            const elName2 = document.getElementById(slugId);
+            const thumb2 = document.getElementById('thumb-' + slugFromName(name));
+            if (elName2) elName2.textContent = name;
+            if (thumb2 && r.discovered) {
+              const slug = slugFromName(name);
+              const imageUrl = r.image_url || r.image || r.thumbnail_url || r.thumbnail || `images/${slug}.png`;
+              thumb2.style.backgroundImage = `url("${imageUrl}")`;
+              thumb2.style.backgroundSize = 'cover';
+            }
+            return;
+          }
           if (r.discovered) {
             elName.textContent = name;
             // prefer explicit image/url fields from DB; fall back to slug-based local images
             const slug = slugFromName(name);
-            const imageUrl = r.image_url || r.image || r.thumbnail_url || r.thumbnail || `images/${slug}.png`;
-            // If the imageUrl looks like a storage path without host and starts with 'images/', keep as relative
-            // Set background image (use quotes to handle spaces)
+            let imageUrl = r.image_url || r.image || r.thumbnail_url || r.thumbnail || `images/${slug}.png`;
+            if (imageUrl && !imageUrl.startsWith('http') && imageUrl.indexOf('/') === -1) {
+              // simple filename, make it relative
+              imageUrl = `images/${imageUrl}`;
+            }
             try {
               thumb.style.backgroundImage = `url("${imageUrl}")`;
               thumb.style.backgroundSize = 'cover';
             } catch (e) {
-              // fallback: clear image
               thumb.style.backgroundImage = '';
             }
             // add timestamp if available
@@ -187,6 +209,11 @@
     })();
 
   </script>
+
+  <style>
+    /* small helper so the header area feels clickable */
+    .collection-header { cursor: pointer; padding: 6px 0 10px 0; }
+  </style>
 
 </body>
 </html>
