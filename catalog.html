@@ -65,10 +65,15 @@
   </main>
 
   <script>
+    // Toggle a collection by id — toggles .open on the .collection element (no inline display)
     function toggleList(id) {
       const list = document.getElementById(id);
       if (!list) return;
-      list.style.display = list.style.display === "block" ? "none" : "block";
+      const collection = list.closest('.collection');
+      if (!collection) return;
+      const isOpen = collection.classList.toggle('open');
+      const header = collection.querySelector('.collection-header');
+      if (header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     }
 
     // Utility: create slug from name for image filenames
@@ -116,10 +121,12 @@
         const thumb = document.createElement('div');
         thumb.className = 'kobblin-thumb';
         thumb.id = 'thumb-' + k.name;
+        thumb.dataset.name = k.name.toLowerCase();
 
         const nameEl = document.createElement('span');
         nameEl.className = 'kobblin-name';
         nameEl.id = 'name-' + k.name;
+        nameEl.dataset.name = k.name.toLowerCase();
         nameEl.textContent = '<undiscovered>';
 
         const num = document.createElement('span');
@@ -150,12 +157,15 @@
           }
         });
         const rows = await res.json();
+        console.debug('updateFromDB returned rows:', rows);
         rows.forEach(r => {
+          console.debug('processing row:', r);
           const name = (r.name || '').trim();
           if (!name) return;
           const key = name.toLowerCase();
           const elName = document.querySelector('.kobblin-name[data-name="' + key + '"]') || document.getElementById('name-' + name);
           const thumb = document.querySelector('.kobblin-thumb[data-name="' + key + '"]') || document.getElementById('thumb-' + name);
+          console.debug('matched elements for', name, { elName: !!elName, thumb: !!thumb });
           if (!elName || !thumb) {
             // try slug id fallback
             const slugId = 'name-' + slugFromName(name);
@@ -208,6 +218,26 @@
       }
     })();
 
+    // Ensure collections start collapsed and make headers keyboard-accessible
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.collection').forEach(col => {
+        col.classList.remove('open');
+        const header = col.querySelector('.collection-header');
+        if (header) header.setAttribute('aria-expanded', 'false');
+        const list = col.querySelector('.kobblin-list');
+        if (list) list.style.display = '';
+      });
+
+      document.querySelectorAll('.collection-header').forEach(header => {
+        header.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const list = header.closest('.collection').querySelector('.kobblin-list');
+            if (list && list.id) toggleList(list.id);
+          }
+        });
+      });
+    });
   </script>
 
   <style>
