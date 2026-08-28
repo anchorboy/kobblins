@@ -81,7 +81,7 @@
       return (name || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     }
 
-    // Ordered Genesis kobblins data
+    // Ordered Genesis kobblins data (use ids to match DB reliably)
     const genesisKobblins = [
       {id:'GEN001', name:'Glimmer', number:'01/23'},
       {id:'GEN002', name:'Pebble',  number:'02/23'},
@@ -108,7 +108,7 @@
       {id:'GEN023', name:'Orion',   number:'23/23'}
     ];
 
-    // Build DOM rows cleanly
+    // Build DOM rows cleanly (attach data-id for robust matching by kobblin id)
     function buildGenesisList() {
       const container = document.getElementById('genesis');
       if (!container) return;
@@ -120,13 +120,13 @@
 
         const thumb = document.createElement('div');
         thumb.className = 'kobblin-thumb';
-        thumb.id = 'thumb-' + k.name;
-        thumb.dataset.name = k.name.toLowerCase();
+        thumb.id = 'thumb-' + k.id;            // use ID-based ids
+        thumb.dataset.id = k.id;
 
         const nameEl = document.createElement('span');
         nameEl.className = 'kobblin-name';
-        nameEl.id = 'name-' + k.name;
-        nameEl.dataset.name = k.name.toLowerCase();
+        nameEl.id = 'name-' + k.id;           // use ID-based ids
+        nameEl.dataset.id = k.id;
         nameEl.textContent = '<undiscovered>';
 
         const num = document.createElement('span');
@@ -144,13 +144,13 @@
     // Run builder immediately so DOM is well-formed before data fetch
     buildGenesisList();
 
-    // Update discovered state from the DB (same project as site)
+    // Update discovered state from the DB (now matches by kobblin id which is reliable)
     (async function updateFromDB(){
       const SUPABASE_URL = 'https://ojkziqfqokifxmobmzcv.supabase.co';
       const SUPABASE_ANON_KEY = 'sb_publishable_2qU46FYMyWxCmomlkikmAQ_WomS8c0Q';
       try {
-        // request image fields as well so we can show thumbnails from DB if present
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/kobblins?select=id,name,discovered,last_discovered_at,image,thumbnail,image_url,thumbnail_url`, {
+        // request id and name and discovered fields
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/kobblins?select=id,name,discovered,last_discovered_at`, {
           headers: {
             'apikey': SUPABASE_ANON_KEY,
             'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
@@ -158,58 +158,57 @@
         });
         const rows = await res.json();
         console.debug('updateFromDB returned rows:', rows);
+
         rows.forEach(r => {
           console.debug('processing row:', r);
+          const kid = String(r.id || '').trim();
           const name = (r.name || '').trim();
-          if (!name) return;
-          const key = name.toLowerCase();
-          const elName = document.querySelector('.kobblin-name[data-name="' + key + '"]') || document.getElementById('name-' + name);
-          const thumb = document.querySelector('.kobblin-thumb[data-name="' + key + '"]') || document.getElementById('thumb-' + name);
-          console.debug('matched elements for', name, { elName: !!elName, thumb: !!thumb });
+          if (!kid) return;
+
+          // match DOM by id attribute we set earlier
+          const elName = document.getElementById('name-' + kid) || document.querySelector('.kobblin-name[data-id="' + kid + '"]');
+          const thumb = document.getElementById('thumb-' + kid) || document.querySelector('.kobblin-thumb[data-id="' + kid + '"]');
+          console.debug('matched elements for id=' + kid + ' name=' + name, { elName: !!elName, thumb: !!thumb });
+
           if (!elName || !thumb) {
-            // try slug id fallback
-            const slugId = 'name-' + slugFromName(name);
-            const elName2 = document.getElementById(slugId);
-            const thumb2 = document.getElementById('thumb-' + slugFromName(name));
-            if (elName2) elName2.textContent = name;
-            if (thumb2 && r.discovered) {
-              const slug = slugFromName(name);
-              const imageUrl = r.image_url || r.image || r.thumbnail_url || r.thumbnail || `images/${slug}.png`;
-              thumb2.style.backgroundImage = `url("${imageUrl}")`;
-              thumb2.style.backgroundSize = 'cover';
-            }
+            console.debug('NO DOM match for', kid, name, 'skipping update');
             return;
           }
+
           if (r.discovered) {
-            elName.textContent = name;
-            // prefer explicit image/url fields from DB; fall back to slug-based local images
-            const slug = slugFromName(name);
-            let imageUrl = r.image_url || r.image || r.thumbnail_url || r.thumbnail || `images/${slug}.png`;
-            if (imageUrl && !imageUrl.startsWith('http') && imageUrl.indexOf('/') === -1) {
-              // simple filename, make it relative
-              imageUrl = `images/${imageUrl}`;
-            }
+            // update display name to the canonical DB name
+            elName.textContent = name || elName.textContent;
+
+            // thumbnail fallback: slug-based local image
+            const slug = slugFromName(name || kid);
+            let imageUrl = `images/${slug}.png`;
+
             try {
               thumb.style.backgroundImage = `url("${imageUrl}")`;
               thumb.style.backgroundSize = 'cover';
             } catch (e) {
               thumb.style.backgroundImage = '';
             }
+
             // add timestamp if available
             if (r.last_discovered_at) {
-              let tsEl = document.getElementById('discovered-at-' + name);
+              let tsEl = document.getElementById('discovered-at-' + kid);
               if (!tsEl) {
                 tsEl = document.createElement('span');
-                tsEl.id = 'discovered-at-' + name;
+                tsEl.id = 'discovered-at-' + kid;
                 tsEl.className = 'discovered-at';
                 elName.parentNode.insertBefore(tsEl, elName.nextSibling);
               }
               tsEl.textContent = ` • found ${new Date(r.last_discovered_at).toLocaleString()}`;
             }
+
+            // ensure its collection is open so users can see discovered items (optional)
+            // const collection = elName.closest('.collection'); if (collection) collection.classList.add('open');
+
           } else {
             elName.textContent = '<undiscovered>';
             thumb.style.backgroundImage = '';
-            const tsEl = document.getElementById('discovered-at-' + name);
+            const tsEl = document.getElementById('discovered-at-' + kid);
             if (tsEl) tsEl.remove();
           }
         });
@@ -229,6 +228,8 @@
       });
 
       document.querySelectorAll('.collection-header').forEach(header => {
+        header.setAttribute('role','button');
+        header.setAttribute('tabindex','0');
         header.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -239,11 +240,6 @@
       });
     });
   </script>
-
-  <style>
-    /* small helper so the header area feels clickable */
-    .collection-header { cursor: pointer; padding: 6px 0 10px 0; }
-  </style>
 
 </body>
 </html>
