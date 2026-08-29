@@ -45,24 +45,49 @@
   </div>
 
   <script>
+  // 1. Initialize Supabase Client (using your credentials from catalog.html)
+  const SUPABASE_URL = 'https://ojkziqfqokifxmobmzcv.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_2qU46FYMyWxCmomlkikmAQ_WomS8c0Q';
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   function closePopup() {
     document.getElementById('kobblin-popup').style.display = 'none';
   }
 
-  // Read the URL parameters when the page loads
+  async function handleClaim(token) {
+    // Call Supabase function to claim the Kobblin
+    const { data, error } = await _supabase.rpc('claim_kobblin', { token_input: token });
+
+    if (error || !data || data.length === 0) {
+      console.error('Claim error:', error);
+      alert('Invalid or missing Kobblin code.');
+      return;
+    }
+
+    const claimed = data[0];
+
+    // Populate popup modal elements
+    document.getElementById('popup-name').textContent = 'You found ' + claimed.name + '!';
+    document.getElementById('popup-image').src = 'images/kobblins/' + claimed.id.toLowerCase() + '.png';
+    document.getElementById('popup-collection').textContent = claimed.collection;
+    document.getElementById('popup-number').textContent = '#' + String(claimed.c_num).padStart(2, '0');
+
+    // Display modal popup overlay
+    document.getElementById('kobblin-popup').style.display = 'flex';
+  }
+
+  // 2. Check URL parameters on page load
   const urlParams = new URLSearchParams(window.location.search);
   const claimToken = urlParams.get('claim');
 
-  // If a claim token is found, run a quick test
   if (claimToken) {
-    console.log('Found secret claim token:', claimToken);
-    alert('Scanned code detected: ' + claimToken);
+    handleClaim(claimToken);
   }
 
   // Reset button
   document.getElementById('reset-btn').addEventListener('click', () => {
     localStorage.clear();
-    alert('All Kobblins reset!');
+    alert('Local cache reset!');
   });
 </script>
 
