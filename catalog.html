@@ -191,16 +191,16 @@
             }
 
             // add timestamp if available
-            if (r.last_discovered_at) {
-              let tsEl = document.getElementById('discovered-at-' + kid);
-              if (!tsEl) {
-                tsEl = document.createElement('span');
-                tsEl.id = 'discovered-at-' + kid;
-                tsEl.className = 'discovered-at';
-                elName.parentNode.insertBefore(tsEl, elName.nextSibling);
-              }
-              tsEl.textContent = ` • found ${new Date(r.last_discovered_at).toLocaleString()}`;
-            }
+if (r.last_discovered_at) {
+  let tsEl = document.getElementById('discovered-at-' + kid);
+  if (!tsEl) {
+    tsEl = document.createElement('span');
+    tsEl.id = 'discovered-at-' + kid;
+    tsEl.className = 'discovered-at';
+    elName.parentNode.insertBefore(tsEl, elName.nextSibling);
+  }
+  tsEl.textContent = ` • found ${new Date(r.last_discovered_at).toLocaleDateString('en-US', { timeZone: 'UTC' })}`;
+}
 
             // ensure its collection is open so users can see discovered items (optional)
             // const collection = elName.closest('.collection'); if (collection) collection.classList.add('open');
