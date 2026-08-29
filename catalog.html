@@ -226,26 +226,24 @@ if (r.last_discovered_at) {
 
     // Ensure collections start collapsed and make headers keyboard-accessible
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.collection').forEach(col => {
-        col.classList.remove('open');
-        const header = col.querySelector('.collection-header');
-        if (header) header.setAttribute('aria-expanded', 'false');
-        const list = col.querySelector('.kobblin-list');
-        if (list) list.style.display = '';
-      });
+  document.querySelectorAll('.collection').forEach(col => {
+    col.classList.remove('open');
+    const header = col.querySelector('.collection-header');
+    if (header) header.setAttribute('aria-expanded', 'false');
+  });
 
-      document.querySelectorAll('.collection-header').forEach(header => {
-        header.setAttribute('role','button');
-        header.setAttribute('tabindex','0');
-        header.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            const list = header.closest('.collection').querySelector('.kobblin-list');
-            if (list && list.id) toggleList(list.id);
-          }
-        });
-      });
+  document.querySelectorAll('.collection-header').forEach(header => {
+    header.setAttribute('role','button');
+    header.setAttribute('tabindex','0');
+    header.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const list = header.closest('.collection').querySelector('.kobblin-list');
+        if (list && list.id) toggleList(list.id);
+      }
     });
+  });
+});
   </script>
 
 </body>
