@@ -84,11 +84,20 @@
     handleClaim(claimToken);
   }
 
-  // Reset button
-  document.getElementById('reset-btn').addEventListener('click', () => {
-    localStorage.clear();
-    alert('Local cache reset!');
-  });
+ // Updated Reset Button Logic
+document.getElementById('reset-btn').addEventListener('click', async () => {
+  const confirmReset = confirm('Are you sure you want to reset all Kobblins back to undiscovered in the database?');
+  if (!confirmReset) return;
+
+  const { error } = await _supabase.rpc('reset_all_kobblins');
+
+  if (error) {
+    console.error('Reset error:', error);
+    alert('Failed to reset database: ' + error.message);
+  } else {
+    alert('Database successfully reset! All Kobblins are now locked.');
+  }
+});
 </script>
 
 </body>
