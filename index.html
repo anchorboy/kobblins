@@ -2,14 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <!-- Disable caching so the homepage always loads fresh -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-
-  <title>Kobblins</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kobblins</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
@@ -49,146 +43,16 @@
     </div>
   </div>
 
-  <!-- Supabase + Kobblins loader -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.min.js"></script>
   <script>
-    // CONFIG - supabase project values provided
-    const SUPABASE_URL = 'https://ojkziqfqokifxmobmzcv.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_2qU46FYMyWxCmomlkikmAQ_WomS8c0Q';
-
-    // Table names (normalized)
-    const KOBBLINS_TABLE = 'kobblins';
-    const DISCOVERIES_TABLE = 'discoveries';
-
-    // Create Supabase client
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Data maps
-    let kobblinData = {};       // keyed by exact name
-    let kobblinDataLower = {};  // keyed by lowercase name for case-insensitive lookup
-
-    // Utility: create slug from name for image filenames
-    function slugFromName(name) {
-      return name.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    }
-
-    // Normalize DB row to JS object
-    function normalizeRow(r) {
-      const name = r.name || r.NAME || '';
-      const slug = slugFromName(name || '');
-      return {
-        id: r.id ?? null,
-        name: name,
-        collection: r.collection ?? r.COLLECTION ?? '',
-        number: r.c_num ?? r['C NUM'] ?? r.o_num ?? r['O NUM'] ?? r.display_number ?? '',
-        image: r.image_url ?? r.image ?? `images/${slug}.png`,
-        thumbnail: r.thumbnail_url ?? r.thumbnail ?? `images/thumbs/${slug}.png`
-      };
-    }
-
-    // Load kobblins from Supabase
-    async function loadKobblins() {
-      try {
-        const { data: rows, error } = await supabaseClient
-          .from(KOBBLINS_TABLE)
-          .select('*');
-
-        if (error) {
-          console.error('Supabase error:', error);
-          return;
-        }
-
-        kobblinData = {};
-        kobblinDataLower = {};
-
-        rows.forEach(r => {
-          const obj = normalizeRow(r);
-          if (!obj.name) return;
-          kobblinData[obj.name] = obj;
-          kobblinDataLower[obj.name.toLowerCase()] = obj;
-        });
-
-        // --- mark discovered items in localStorage so catalog.html recognizes them ---
-        rows.forEach(r => {
-          const name = (r.name || r.NAME || '').trim();
-          if (!name) return;
-          if (r.discovered) {
-            try { localStorage.setItem(name, 'discovered'); } catch (e) { /* ignore storage errors */ }
-          }
-        });
-        // -----------------------------------------------------------------------------
-
-        // After loading, handle URL param for popup
-        handleUrlParam();
-      } catch (err) {
-        console.error('Error loading Kobblins from Supabase:', err);
-      }
-    }
-
-    // Record discovery by inserting into discoveries table (simple insert, discovered_at defaults to now())
-    async function recordDiscovery(kobblinRecord) {
-      try {
-        if (!kobblinRecord) return;
-        const key = kobblinRecord.name;
-        // Prevent repeated sends from same browser
-        if (localStorage.getItem('disc:' + key) === 'sent') return;
-
-        const payload = {
-          kobblin_id: kobblinRecord.id ?? null,
-          kobblin_name: key
-        };
-
-        const { data, error } = await supabaseClient
-          .from(DISCOVERIES_TABLE)
-          .insert([payload]);
-
-        if (error) {
-          console.error('Discovery record error:', error);
-        } else {
-          localStorage.setItem('disc:' + key, 'sent');
-          localStorage.setItem(key, 'discovered');
-        }
-      } catch (err) {
-        console.error('Unexpected error recording discovery:', err);
-      }
-    }
-
-    // Show popup if ?kobblin=NAME is present
-    function handleUrlParam() {
-      const params = new URLSearchParams(window.location.search);
-      const foundParam = params.get('kobblin');
-      if (!foundParam) return;
-
-      const key = foundParam.trim();
-      const k = kobblinData[key] || kobblinDataLower[key.toLowerCase()];
-      if (!k) return;
-
-      document.getElementById('popup-name').textContent = k.name;
-      document.getElementById('popup-image').src = k.image || '';
-      document.getElementById('popup-collection').textContent = k.collection || '';
-      document.getElementById('popup-number').textContent = k.number || '';
-      document.getElementById('kobblin-popup').style.display = 'flex';
-
-      // Mark discovered locally
-      localStorage.setItem(k.name, 'discovered');
-
-      // Send discovery to DB (will be no-op if already sent from this browser)
-      recordDiscovery(k);
-    }
-
     function closePopup() {
       document.getElementById('kobblin-popup').style.display = 'none';
     }
 
-    // Reset button (unchanged behavior)
+    // Reset button
     document.getElementById('reset-btn').addEventListener('click', () => {
       localStorage.clear();
-      alert('All Kobblins reset! You can test QR codes again.');
+      alert('All Kobblins reset!');
     });
-
-    // Load kobblins after DOM ready
-    window.addEventListener('DOMContentLoaded', loadKobblins);
-
   </script>
 
 </body>
