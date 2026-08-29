@@ -67,106 +67,106 @@
   </main>
 
   <script>
-    // Toggle a collection by id
-    function toggleList(id) {
-      const list = document.getElementById(id);
-      if (!list) return;
-      const collection = list.closest('.collection');
-      if (!collection) return;
-      const isOpen = collection.classList.toggle('open');
-      const header = collection.querySelector('.collection-header');
-      if (header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  // Initialize Supabase Client
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Toggle collection drawer
+  function toggleList(id) {
+    const list = document.getElementById(id);
+    if (!list) return;
+    const collection = list.closest('.collection');
+    if (!collection) return;
+    const isOpen = collection.classList.toggle('open');
+    const header = collection.querySelector('.collection-header');
+    if (header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  // Fetch live Kobblins from Supabase and render rows
+  async function loadCatalog() {
+    const { data: kobblins, error } = await _supabase
+      .from('kobblins')
+      .select('*')
+      .order('c_num', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching catalog:', error);
+      return;
     }
 
-    // Utility: create slug from name for image filenames
-    function slugFromName(name) {
-      return (name || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    }
+    const genesisContainer = document.getElementById('genesis');
+    if (!genesisContainer) return;
+    genesisContainer.innerHTML = '';
 
-    // Ordered Genesis kobblins data
-    const genesisKobblins = [
-      {id:'GEN001', name:'Glimmer', number:'01/23'},
-      {id:'GEN002', name:'Pebble',  number:'02/23'},
-      {id:'GEN003', name:'Milo',    number:'03/23'},
-      {id:'GEN004', name:'Mossy',   number:'04/23'},
-      {id:'GEN005', name:'Pip',     number:'05/23'},
-      {id:'GEN006', name:'Bramble', number:'06/23'},
-      {id:'GEN007', name:'Flint',   number:'07/23'},
-      {id:'GEN008', name:'Ember',   number:'08/23'},
-      {id:'GEN009', name:'Sprout',  number:'09/23'},
-      {id:'GEN010', name:'Ziggy',   number:'10/23'},
-      {id:'GEN011', name:'Rune',    number:'11/23'},
-      {id:'GEN012', name:'Oat',     number:'12/23'},
-      {id:'GEN013', name:'Cricket', number:'13/23'},
-      {id:'GEN014', name:'Jasper',  number:'14/23'},
-      {id:'GEN015', name:'Twig',    number:'15/23'},
-      {id:'GEN016', name:'Nico',    number:'16/23'},
-      {id:'GEN017', name:'Cinder',  number:'17/23'},
-      {id:'GEN018', name:'Blink',   number:'18/23'},
-      {id:'GEN019', name:'Hazel',   number:'19/23'},
-      {id:'GEN020', name:'Echo',    number:'20/23'},
-      {id:'GEN021', name:'Finch',   number:'21/23'},
-      {id:'GEN022', name:'Copper',  number:'22/23'},
-      {id:'GEN023', name:'Orion',   number:'23/23'}
-    ];
-
-    // Build DOM rows
-    function buildGenesisList() {
-      const container = document.getElementById('genesis');
-      if (!container) return;
-      container.innerHTML = '';
-
-      genesisKobblins.forEach(k => {
+    kobblins.forEach(k => {
+      if (k.collection.toLowerCase() === 'genesis') {
         const row = document.createElement('div');
         row.className = 'kobblin-row';
 
+        // 1. Thumbnail Image
         const thumb = document.createElement('div');
         thumb.className = 'kobblin-thumb';
-        thumb.id = 'thumb-' + k.id;
-        thumb.dataset.id = k.id;
+        if (k.discovered) {
+          const img = document.createElement('img');
+          img.src = `images/kobblins/${k.id.toLowerCase()}.png`;
+          img.alt = k.name;
+          thumb.appendChild(img);
+        } else {
+          thumb.style.background = '#b0a493'; // Locked/silhouette background
+        }
 
+        // 2. Name & Discovery Date
         const nameEl = document.createElement('span');
         nameEl.className = 'kobblin-name';
-        nameEl.id = 'name-' + k.id;
-        nameEl.dataset.id = k.id;
-        nameEl.textContent = k.name;
+        nameEl.textContent = k.discovered ? k.name : '???';
 
+        if (k.discovered && k.last_discovered_at) {
+          const dateEl = document.createElement('small');
+          dateEl.className = 'discovered-at';
+          const formattedDate = new Date(k.last_discovered_at).toLocaleDateString();
+          dateEl.textContent = `Found: ${formattedDate}`;
+          nameEl.appendChild(dateEl);
+        }
+
+        // 3. Catalog Number (e.g., 01/23)
         const num = document.createElement('span');
         num.className = 'kobblin-number';
-        num.textContent = k.number;
+        const numPadded = String(k.c_num).padStart(2, '0');
+        num.textContent = `${numPadded}/23`;
 
         row.appendChild(thumb);
         row.appendChild(nameEl);
         row.appendChild(num);
+        genesisContainer.appendChild(row);
+      }
+    });
+  }
 
-        container.appendChild(row);
-      });
-    }
+  // Load catalog data on startup
+  loadCatalog();
 
-    // Build list on page load
-    buildGenesisList();
+  // Handle drawer accessibility
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.collection').forEach(col => {
+      col.classList.remove('open');
+      const header = col.querySelector('.collection-header');
+      if (header) header.setAttribute('aria-expanded', 'false');
+    });
 
-    // Ensure collections start collapsed and make headers keyboard-accessible
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.collection').forEach(col => {
-        col.classList.remove('open');
-        const header = col.querySelector('.collection-header');
-        if (header) header.setAttribute('aria-expanded', 'false');
-      });
-
-      document.querySelectorAll('.collection-header').forEach(header => {
-        header.setAttribute('role','button');
-        header.setAttribute('tabindex','0');
-        header.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            const list = header.closest('.collection').querySelector('.kobblin-list');
-            if (list && list.id) toggleList(list.id);
-          }
-        });
+    document.querySelectorAll('.collection-header').forEach(header => {
+      header.setAttribute('role', 'button');
+      header.setAttribute('tabindex', '0');
+      header.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          const list = header.closest('.collection').querySelector('.kobblin-list');
+          if (list && list.id) toggleList(list.id);
+        }
       });
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>
