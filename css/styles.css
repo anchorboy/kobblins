@@ -269,3 +269,13 @@ body {
   .kobblin-thumb { width: 40px; height: 40px; }
   .discovered-at { display: none; } /* hide timestamp on narrow screens to keep rows short */
 }
+
+/* 1. Hide the list by default */
+.kobblin-list {
+  display: none;
+}
+
+/* 2. Show the list when JavaScript toggles the .open class */
+.collection.open .kobblin-list {
+  display: block;
+}
