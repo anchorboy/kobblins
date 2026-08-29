@@ -197,13 +197,16 @@ if (r.last_discovered_at) {
     tsEl = document.createElement('span');
     tsEl.id = 'discovered-at-' + kid;
     tsEl.className = 'discovered-at';
+    elName.parentNode.insertBefore(tsEl, elName.nextSibling);
   }
-  tsEl.textContent = ` • found ${new Date(r.last_discovered_at).toLocaleDateString('en-US', { timeZone: 'UTC' })}`;
   
-  // Append inside the name element or immediately after inside a wrapper container
-  if (!elName.contains(tsEl)) {
-    elName.appendChild(tsEl);
-  }
+  const formattedDate = new Date(r.last_discovered_at).toLocaleString('en-US', {
+    dateStyle: 'short',
+    timeStyle: 'short'
+  });
+
+  tsEl.textContent = ` • found ${formattedDate}`;
+}
 }
 
             // ensure its collection is open so users can see discovered items (optional)
