@@ -97,12 +97,13 @@ body {
 
 /* each row is a 3-column grid: thumb | name+timestamp | number */
 .kobblin-row {
-  display: grid;
+  display: flex;
   grid-template-columns: 56px 1fr 72px; /* thumb | name/timestamp | number */
   grid-column-gap: 12px;
   align-items: center;
+  justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 
 /* slightly larger thumbnail */
@@ -125,8 +126,9 @@ body {
 
 /* name can wrap, timestamp shown below name if needed */
 .kobblin-name {
+  flex: 1; /* Pushes catalog number to the right while staying on the same line */
   font-weight: bold;
-  margin: 0;
+  margin-left: 12px;
   line-height: 1.2;
   white-space: normal; /* allow wrapping */
   overflow: visible;
@@ -135,15 +137,17 @@ body {
 /* timestamp block under the name */
 .discovered-at {
   display: block;
-  margin-top: 4px;
-  font-size: 0.85rem;
+  margin-left: 6px;
+  font-size: 0.9em;
   color: #666;
   font-weight: normal;
+  white-space: nowrap; /* Prevents the date text from wrapping breaking the row height */
 }
 
 /* right column: number */
 .kobblin-number {
   justify-self: end;
+  margin-left: auto;
   font-size: 0.95rem;
   color: #555;
   white-space: nowrap;
