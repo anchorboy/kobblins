@@ -67,12 +67,7 @@
   </main>
 
   <script>
-  // Initialize Supabase Client
-  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // Toggle collection drawer
+  // 1. Toggle function defined immediately so clicks work instantly
   function toggleList(id) {
     const list = document.getElementById(id);
     if (!list) return;
@@ -83,8 +78,22 @@
     if (header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   }
 
-  // Fetch live Kobblins from Supabase and render rows
+  // 2. Initialize Supabase Client
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+  const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+  let _supabase = null;
+
+  if (window.supabase) {
+    _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+
+  // 3. Fetch live Kobblins from Supabase and render rows
   async function loadCatalog() {
+    if (!_supabase) {
+      console.warn('Supabase client not initialized.');
+      return;
+    }
+
     const { data: kobblins, error } = await _supabase
       .from('kobblins')
       .select('*')
@@ -100,11 +109,11 @@
     genesisContainer.innerHTML = '';
 
     kobblins.forEach(k => {
-      if (k.collection.toLowerCase() === 'genesis') {
+      if (k.collection && k.collection.toLowerCase() === 'genesis') {
         const row = document.createElement('div');
         row.className = 'kobblin-row';
 
-        // 1. Thumbnail Image
+        // Thumbnail Image
         const thumb = document.createElement('div');
         thumb.className = 'kobblin-thumb';
         if (k.discovered) {
@@ -113,10 +122,10 @@
           img.alt = k.name;
           thumb.appendChild(img);
         } else {
-          thumb.style.background = '#b0a493'; // Locked/silhouette background
+          thumb.style.background = '#b0a493';
         }
 
-        // 2. Name & Discovery Date
+        // Name & Discovery Timestamp
         const nameEl = document.createElement('span');
         nameEl.className = 'kobblin-name';
         nameEl.textContent = k.discovered ? k.name : '???';
@@ -129,7 +138,7 @@
           nameEl.appendChild(dateEl);
         }
 
-        // 3. Catalog Number (e.g., 01/23)
+        // Catalog Number (e.g. 01/23)
         const num = document.createElement('span');
         num.className = 'kobblin-number';
         const numPadded = String(k.c_num).padStart(2, '0');
@@ -143,10 +152,10 @@
     });
   }
 
-  // Load catalog data on startup
+  // Run catalog load on startup
   loadCatalog();
 
-  // Handle drawer accessibility
+  // Keyboard accessibility
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.collection').forEach(col => {
       col.classList.remove('open');
