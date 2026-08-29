@@ -44,16 +44,26 @@
   </div>
 
   <script>
-    function closePopup() {
-      document.getElementById('kobblin-popup').style.display = 'none';
-    }
+  function closePopup() {
+    document.getElementById('kobblin-popup').style.display = 'none';
+  }
 
-    // Reset button
-    document.getElementById('reset-btn').addEventListener('click', () => {
-      localStorage.clear();
-      alert('All Kobblins reset!');
-    });
-  </script>
+  // Read the URL parameters when the page loads
+  const urlParams = new URLSearchParams(window.location.search);
+  const claimToken = urlParams.get('claim');
+
+  // If a claim token is found, run a quick test
+  if (claimToken) {
+    console.log('Found secret claim token:', claimToken);
+    alert('Scanned code detected: ' + claimToken);
+  }
+
+  // Reset button
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    localStorage.clear();
+    alert('All Kobblins reset!');
+  });
+</script>
 
 </body>
 </html>
