@@ -267,7 +267,7 @@ body {
   .collection { max-width: 420px; width: 96%; }
   .kobblin-row { grid-template-columns: 44px 1fr 56px; grid-column-gap: 10px; padding: 8px 0; }
   .kobblin-thumb { width: 40px; height: 40px; }
-  .discovered-at { display: none; } /* hide timestamp on narrow screens to keep rows short */
+  /* .discovered-at line removed so dates show on mobile */
 }
 
 /* 1. Hide the list by default */
